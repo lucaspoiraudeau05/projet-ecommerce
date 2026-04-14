@@ -1,3 +1,6 @@
+Pepe studio · HTML
+Copier
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -34,31 +37,29 @@
       height: var(--nav-h);
       background: var(--nav-bg);
       display: flex;
-      align-items: stretch; /* les enfants s'étirent sur toute la hauteur */
+      align-items: stretch;
       justify-content: space-between;
       padding-right: 32px;
       z-index: 100;
       border-bottom: 1px solid #2e2e2e;
     }
  
-    /* Logo : pleine hauteur nav, collé bord gauche */
     .logo-wrap {
       width: 160px;
       height: 56px;
       background: #fff;
       overflow: hidden;
       flex-shrink: 0;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
  
-    .logo-wrap img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
+    .logo-wrap span {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #111;
+      letter-spacing: 0.14em;
     }
  
     /* ── NAV LINKS ── */
@@ -69,24 +70,40 @@
       list-style: none;
     }
  
-    .nav-links a {
+    .nav-links button {
       display: inline-block;
+      background: none;
       color: var(--text);
-      text-decoration: none;
       font-family: 'DM Mono', monospace;
       font-size: 13px;
       letter-spacing: 0.1em;
       text-transform: lowercase;
       padding: 7px 20px;
       border: 1px solid transparent;
+      cursor: pointer;
       transition: border-color 0.2s, background 0.2s, color 0.2s;
     }
  
-    .nav-links a:hover { border-color: var(--text); }
-    .nav-links a.active {
+    .nav-links button:hover { border-color: var(--text); }
+    .nav-links button.active {
       border-color: var(--text);
       background: var(--text);
       color: #111;
+    }
+ 
+    .nav-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8b89a;
+      color: #111;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      font-size: 9px;
+      font-weight: 500;
+      margin-left: 5px;
+      vertical-align: middle;
     }
  
     /* ── LAYOUT ── */
@@ -109,19 +126,24 @@
       padding: 0 24px;
     }
  
-    .sidebar a {
+    .sidebar button {
+      background: none;
+      border: none;
       color: var(--text);
-      text-decoration: none;
+      font-family: 'DM Mono', monospace;
       font-size: 14px;
       letter-spacing: 0.04em;
       text-transform: lowercase;
-      opacity: 0.7;
+      opacity: 0.45;
+      cursor: pointer;
+      text-align: left;
+      padding: 0;
       transition: opacity 0.2s, transform 0.2s;
       display: block;
     }
  
-    .sidebar a:hover { opacity: 1; transform: translateX(4px); }
-    .sidebar a.active { opacity: 1; }
+    .sidebar button:hover { opacity: 1; transform: translateX(4px); }
+    .sidebar button.active { opacity: 1; }
  
     /* ── MAIN ── */
     main {
@@ -137,21 +159,39 @@
       position: relative;
     }
  
-    .img-placeholder-left {
+    .img-left {
       width: 45%;
       height: 100%;
+      background: #2c2c2c;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 0;
       animation: fadeIn 0.7s 0.1s forwards;
     }
  
-    .img-placeholder-right {
+    .img-right {
       flex: 1;
       height: 100%;
+      background: #242424;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       opacity: 0;
       animation: fadeIn 0.7s 0.25s forwards;
     }
+ 
+    .img-left img,
+    .img-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+ 
+    .img-placeholder svg { opacity: 0.08; }
  
     /* ── BUY BUTTON ── */
     .buy-btn {
@@ -198,6 +238,179 @@
       letter-spacing: 0.06em;
     }
  
+    /* ── PANIER DRAWER ── */
+    .drawer {
+      position: absolute;
+      top: 0; right: 0; bottom: 0;
+      width: 300px;
+      background: #222;
+      border-left: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      z-index: 50;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+ 
+    .drawer.open { transform: translateX(0); }
+ 
+    .drawer-header {
+      padding: 20px;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+ 
+    .drawer-header span {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #888;
+      text-transform: lowercase;
+    }
+ 
+    .close-btn {
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      padding: 0 4px;
+      font-family: monospace;
+    }
+ 
+    .close-btn:hover { color: var(--text); }
+ 
+    .drawer-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 20px;
+    }
+ 
+    .drawer-empty {
+      color: #444;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 48px;
+      letter-spacing: 0.04em;
+    }
+ 
+    .drawer-item {
+      display: flex;
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid #2e2e2e;
+      align-items: center;
+    }
+ 
+    .item-thumb {
+      width: 48px;
+      height: 56px;
+      background: #333;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    .item-info { flex: 1; }
+ 
+    .item-name {
+      font-size: 12px;
+      color: var(--text);
+      letter-spacing: 0.04em;
+    }
+ 
+    .item-price {
+      font-size: 11px;
+      color: #888;
+      margin-top: 3px;
+    }
+ 
+    .qty-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+ 
+    .qty-btn {
+      background: none;
+      border: 1px solid #3a3a3a;
+      color: #888;
+      width: 22px;
+      height: 22px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+    }
+ 
+    .qty-btn:hover { border-color: var(--text); color: var(--text); }
+ 
+    .qty-num {
+      font-size: 12px;
+      color: var(--text);
+      min-width: 16px;
+      text-align: center;
+    }
+ 
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #3a3a3a;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 4px;
+    }
+ 
+    .remove-btn:hover { color: var(--text); }
+ 
+    .drawer-footer {
+      padding: 16px 20px;
+      border-top: 1px solid #333;
+      flex-shrink: 0;
+    }
+ 
+    .drawer-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #888;
+      padding: 3px 0;
+    }
+ 
+    .drawer-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #333;
+    }
+ 
+    .checkout-btn {
+      width: 100%;
+      margin-top: 12px;
+      background: var(--text);
+      color: #111;
+      border: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: lowercase;
+      padding: 11px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+ 
+    .checkout-btn:hover { opacity: 0.85; }
+ 
     @keyframes fadeIn {
       from { opacity: 0; } to { opacity: 1; }
     }
@@ -209,7 +422,8 @@
  
     @media (max-width: 700px) {
       .sidebar { display: none; }
-      .img-placeholder-left { width: 50%; }
+      .img-left { width: 50%; }
+      .drawer { width: 100%; }
     }
   </style>
 </head>
@@ -217,45 +431,180 @@
  
   <nav>
     <div class="logo-wrap">
-      <img src="logo.webp" alt="Logo" />
+      <img src="logo.webp" alt="Logo" style="width:100%;height:100%;object-fit:cover;">
+      <!-- Remplacez le span par : <img src="logo.webp" alt="Logo" style="width:100%;height:100%;object-fit:cover;"> -->
     </div>
     <ul class="nav-links">
-      <li><a href="#">présentation</a></li>
-      <li><a href="#">contact</a></li>
-      <li><a href="#">panier</a></li>
+      <li><button>présentation</button></li>
+      <li><button>contact</button></li>
+      <li>
+        <button id="panier-btn">
+          panier
+          <span class="nav-badge" id="panier-badge" style="display:none;">0</span>
+        </button>
+      </li>
     </ul>
   </nav>
  
   <div class="page">
  
     <aside class="sidebar">
-      <a href="#" class="active">best sellers</a>
-      <a href="#">homme</a>
-      <a href="#">femme</a>
+      <button class="active" data-index="0">best sellers</button>
+      <button data-index="1">homme</button>
+      <button data-index="2">femme</button>
     </aside>
  
     <main>
       <div class="product-panel">
- 
-        <div class="img-placeholder-left" id="imgLeft">
-          <img src="img droite.webp" style="width:100%;height:100%;object-fit:cover;">
+          <img src="img droite.webp" alt="img-right">
+          <!-- <img src="img droite.webp" alt=""> -->
+          <div class="img-placeholder">
+            <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="12" y="10" width="66" height="70" rx="2" stroke="#e8e4dc" stroke-width="1.5"/>
+              <path d="M12 26h66M30 10v16" stroke="#e8e4dc" stroke-width="1.5"/>
+              <circle cx="45" cy="56" r="12" stroke="#e8e4dc" stroke-width="1.5"/>
+            </svg>
+          </div>
         </div>
- 
-        <div class="img-placeholder-right" id="imgRight">
-          <img src="img gauche.jpg" style="width:100%;height:100%;object-fit:cover;">
+
+        <img src="img gauche.jpg" alt="img-left">
+          <!-- <img src="img gauche.jpg" alt=""> -->
+          <div class="img-placeholder">
+            <svg width="64" height="90" viewBox="0 0 64 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 8 C20 8 10 18 10 36 C10 58 20 80 32 80 C44 80 54 58 54 36 C54 18 44 8 44 8" stroke="#e8e4dc" stroke-width="1.5" fill="none"/>
+              <path d="M20 8 Q32 16 44 8" stroke="#e8e4dc" stroke-width="1.5" fill="none"/>
+              <line x1="32" y1="8" x2="32" y2="80" stroke="#e8e4dc" stroke-width="1"/>
+            </svg>
+          </div>
         </div>
  
         <div class="product-info">
-          <div class="name">jogging noir</div>
-          <div class="price">89 €</div>
+          <div class="name" id="prod-name">jogging noir</div>
+          <div class="price" id="prod-price">89 €</div>
         </div>
  
-        <button class="buy-btn">buy</button>
+        <button class="buy-btn" id="buy-btn">buy</button>
+ 
+        <!-- PANIER DRAWER -->
+        <div class="drawer" id="drawer">
+          <div class="drawer-header">
+            <span>panier</span>
+            <button class="close-btn" id="close-btn">×</button>
+          </div>
+          <div class="drawer-items" id="drawer-items">
+            <div class="drawer-empty">votre panier est vide</div>
+          </div>
+          <div class="drawer-footer" id="drawer-footer" style="display:none;">
+            <div class="drawer-row"><span>sous-total</span><span id="d-subtotal">0 €</span></div>
+            <div class="drawer-row"><span>livraison</span><span id="d-shipping">4,99 €</span></div>
+            <div class="drawer-total"><span>total</span><span id="d-total">0 €</span></div>
+            <button class="checkout-btn">commander →</button>
+          </div>
+        </div>
  
       </div>
     </main>
  
   </div>
+ 
+  <script>
+    const PRODUCTS = [
+      { id: 1, name: "jogging noir",    price: 89  },
+      { id: 2, name: "t-shirt blanc",   price: 45  },
+      { id: 3, name: "veste oversize",  price: 120 },
+    ];
+ 
+    let basket = {};
+    let currentProduct = PRODUCTS[0];
+ 
+    const drawer       = document.getElementById('drawer');
+    const badge        = document.getElementById('panier-badge');
+    const drawerItems  = document.getElementById('drawer-items');
+    const drawerFooter = document.getElementById('drawer-footer');
+ 
+    // Ouvrir / fermer le panier
+    document.getElementById('panier-btn').addEventListener('click', () => {
+      drawer.classList.toggle('open');
+    });
+ 
+    document.getElementById('close-btn').addEventListener('click', () => {
+      drawer.classList.remove('open');
+    });
+ 
+    // Changer de produit via la sidebar
+    document.querySelectorAll('.sidebar button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const idx = parseInt(btn.dataset.index);
+        currentProduct = PRODUCTS[idx] || PRODUCTS[0];
+        document.getElementById('prod-name').textContent  = currentProduct.name;
+        document.getElementById('prod-price').textContent = currentProduct.price + ' €';
+      });
+    });
+ 
+    // Ajouter au panier
+    document.getElementById('buy-btn').addEventListener('click', () => {
+      const id = currentProduct.id;
+      basket[id] = (basket[id] || 0) + 1;
+      renderDrawer();
+      drawer.classList.add('open');
+    });
+ 
+    function changeQty(id, delta) {
+      basket[id] = (basket[id] || 0) + delta;
+      if (basket[id] <= 0) delete basket[id];
+      renderDrawer();
+    }
+ 
+    function renderDrawer() {
+      const ids      = Object.keys(basket);
+      const totalQty = ids.reduce((s, k) => s + basket[k], 0);
+ 
+      badge.style.display = totalQty > 0 ? 'inline-flex' : 'none';
+      badge.textContent   = totalQty;
+ 
+      if (ids.length === 0) {
+        drawerItems.innerHTML = '<div class="drawer-empty">votre panier est vide</div>';
+        drawerFooter.style.display = 'none';
+        return;
+      }
+ 
+      let subtotal = 0;
+      drawerItems.innerHTML = ids.map(id => {
+        const p    = PRODUCTS.find(x => x.id == id);
+        const line = p.price * basket[id];
+        subtotal  += line;
+        return `
+          <div class="drawer-item">
+            <div class="item-thumb">
+              <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.3">
+                <path d="M6 2 C6 2 2 6 2 12 C2 22 6 26 11 26 C16 26 20 22 20 12 C20 6 16 2 16 2" stroke="#e8e4dc" stroke-width="1" fill="none"/>
+                <path d="M6 2 Q11 6 16 2" stroke="#e8e4dc" stroke-width="1" fill="none"/>
+              </svg>
+            </div>
+            <div class="item-info">
+              <div class="item-name">${p.name}</div>
+              <div class="item-price">${line} €</div>
+              <div class="qty-row">
+                <button class="qty-btn" onclick="changeQty(${id}, -1)">−</button>
+                <span class="qty-num">${basket[id]}</span>
+                <button class="qty-btn" onclick="changeQty(${id}, 1)">+</button>
+              </div>
+            </div>
+            <button class="remove-btn" onclick="changeQty(${id}, -999)">×</button>
+          </div>`;
+      }).join('');
+ 
+      const shipping = subtotal >= 100 ? 0 : 4.99;
+      const total    = subtotal + shipping;
+ 
+      document.getElementById('d-subtotal').textContent = subtotal.toFixed(2).replace('.', ',') + ' €';
+      document.getElementById('d-shipping').textContent = shipping === 0 ? 'offerte' : '4,99 €';
+      document.getElementById('d-total').textContent    = total.toFixed(2).replace('.', ',') + ' €';
+      drawerFooter.style.display = 'block';
+    }
+  </script>
  
 </body>
 </html>
